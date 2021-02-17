@@ -9,6 +9,19 @@
   <div id="game-screen">
     <noscript>You must enable JavaScript to run this game.</noscript>
   </div>
+  <div id="debugger">
+    <div id="control-panel">
+      <button onclick="startGameLoop()">Start</button>
+      <button onclick="stopGameLoop()">Stop</button>
+      <button onclick="reset()">Reset</button>
+    </div>
+    <div id="metrics">
+      <div id="gameloop-id"></div>
+      <div id="running-time">0</div>
+      <div id="frame-counter">0</div>
+      <div id="fps">0</div>
+    </div>
+  </div>
 </body>
 
 <script src="main.js"></script>
