@@ -11,6 +11,10 @@ let engineState = {
   runningTimeMS: 0,
 };
 
+let gameState = {
+  objects: [],
+}
+
 const DOM = {
   playScreen: document.getElementById("playscreen"),
   controlPanel: {
@@ -113,7 +117,7 @@ function reset() {
 function initGameRender() {
   DOM.gameRenderArea = document.createElement("canvas");
   DOM.gameRenderArea.id = "game-render-area";
-  const { offsetHeight, offsetWidth } = DOM.playScreen
+  const { offsetHeight, offsetWidth } = DOM.playScreen;
   DOM.gameRenderArea.width = offsetWidth;
   DOM.gameRenderArea.height = offsetHeight;
   
@@ -125,6 +129,10 @@ function initGameRender() {
   if (!document.getElementById("game-render-area")) {
     DOM.playScreen.appendChild(DOM.gameRenderArea);
   }
+
+  const player = new createGameObject("redbox", 20, 20, 50, 50, "red");
+  gameState.objects.push(player);
+}
 
 function createGameObject(id, width, height, x, y, color) {
   this.id = id;
