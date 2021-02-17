@@ -171,8 +171,60 @@ function createGameObject(id, width, height, x, y, color) {
   return this;
 }
 
+// Setup event listeners
+function setupEvents() {
+  document.addEventListener('keyup', ({ key }) => {
+    // console.log("Key Up", key);
+
+    switch(key) {
+      case "ArrowRight":
+        gameState.interactions.right = false;
+        break;
+      case "ArrowLeft":
+        gameState.interactions.left = false;
+        break;
+      case "ArrowUp":
+        gameState.interactions.up = false;
+        break;
+      case "ArrowDown":
+        gameState.interactions.down = false;
+        break;
+      case " ":
+        gameState.interactions.space = false;
+        break;
+      default:
+        break;
+    }
+  });
+
+  document.addEventListener('keydown', function({ key }){
+    // console.log("Key Down", key);
+
+    switch(key) {
+      case "ArrowRight":
+        gameState.interactions.right = true;
+        break;
+      case "ArrowLeft":
+        gameState.interactions.left = true;
+        break;
+      case "ArrowUp":
+        gameState.interactions.up = true;
+        break;
+      case "ArrowDown":
+        gameState.interactions.down = true;
+        break;
+      case " ":
+        gameState.interactions.space = true;
+        break;
+      default:
+        break;
+    }
+  });
+}
+
 (function main() {
   initGameRender();
   reset();
   startGameLoop();
+  setupEvents();
 })();
