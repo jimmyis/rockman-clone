@@ -2,11 +2,14 @@ let engineState = {
   mainLoopId: null,
 };
 
-const controlPanelDOM = {
-  gameLoopId: document.getElementById("gameloop-id"),
-  runningTime: document.getElementById("running-time"),
-  frameCounter: document.getElementById("frame-counter"),
-  FPS: document.getElementById("fps"),
+const DOM = {
+  gameScreen: document.getElementById("game-screen"),
+  controlPanel: {
+    gameLoopId: document.getElementById("gameloop-id"),
+    runningTime: document.getElementById("running-time"),
+    frameCounter: document.getElementById("frame-counter"),
+    FPS: document.getElementById("fps")
+  }
 }
 
 function constantFrameRunner(time) {
@@ -29,9 +32,9 @@ function constantFrameRunner(time) {
 }
 
 function renderDebugger() {
-  controlPanelDOM.FPS.innerText = engineState.FPS + " fps";
-  controlPanelDOM.frameCounter.innerText = engineState.frameCount + " frames";
-  controlPanelDOM.runningTime.innerText = engineState.runningTimeSecond + " s";
+  DOM.controlPanel.FPS.innerText = engineState.FPS + " fps";
+  DOM.controlPanel.frameCounter.innerText = engineState.frameCount + " frames";
+  DOM.controlPanel.runningTime.innerText = engineState.runningTimeSecond + " s";
 }
 
 function update(time) {
@@ -78,9 +81,6 @@ function reset() {
 }
 
 (function main() {
-  const gameScreen = document.getElementById("game-screen");
-  gameScreen.style.backgroundColor = "#55f81f";
-
   reset();
   constantFrameRunner();
 })();
