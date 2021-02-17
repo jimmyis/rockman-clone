@@ -56,6 +56,7 @@ function startGameLoop() {
     constantFrameRunner();
   }
   engineState.isGameLoopStart = true;
+  initGameRender();
 }
 
 function stopGameLoop() {
@@ -81,7 +82,25 @@ function reset() {
   renderDebugger();
 }
 
+function initGameRender() {
+  DOM.gameRenderArea = document.createElement("canvas");
+  DOM.gameRenderArea.id = "game-render-area";
+  const { offsetHeight, offsetWidth } = DOM.playScreen
+  DOM.gameRenderArea.width = offsetWidth;
+  DOM.gameRenderArea.height = offsetHeight;
+  
+  engineState.renderCtx = DOM.gameRenderArea.getContext("2d");
+  const ctx = engineState.renderCtx;
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, DOM.gameRenderArea.width, DOM.gameRenderArea.height);
+
+  if (!document.getElementById("game-render-area")) {
+    DOM.playScreen.appendChild(DOM.gameRenderArea);
+  }
+}
+
 (function main() {
   reset();
+  initGameRender();
   constantFrameRunner();
 })();
