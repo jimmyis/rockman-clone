@@ -24,6 +24,7 @@ function constantFrameRunner(time) {
   engineState.runningTimeSecond = currentSecond;
 
   if (engineState.isGameLoopStart) {
+    renderDebugger(time);
     engineState.FPS = (1000 / secondPerFrame).toFixed(2);
     gameLoop(time)
   }
@@ -46,7 +47,6 @@ function render() {
 }
 
 function gameLoop(time) {
-  renderDebugger();
   update(time);
   render();
 }
