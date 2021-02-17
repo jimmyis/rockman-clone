@@ -42,7 +42,7 @@ function update(time) {
 }
 
 function render() {
-  
+  DOM.gameScreen.style.backgroundColor = "#55f81f";
 }
 
 function gameLoop(time) {
@@ -65,6 +65,7 @@ function stopGameLoop() {
 
 function reset() {
   window.cancelAnimationFrame(engineState.mainLoopId);
+  DOM.gameScreen.style.backgroundColor = "black";
 
   engineState = {
     mainLoopId: null,
