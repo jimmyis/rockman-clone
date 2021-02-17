@@ -3,7 +3,7 @@ let engineState = {
 };
 
 const DOM = {
-  gameScreen: document.getElementById("game-screen"),
+  playScreen: document.getElementById("playscreen"),
   controlPanel: {
     gameLoopId: document.getElementById("gameloop-id"),
     runningTime: document.getElementById("running-time"),
@@ -43,7 +43,7 @@ function update(time) {
 }
 
 function render() {
-  DOM.gameScreen.style.backgroundColor = "#55f81f";
+  DOM.playScreen.style.backgroundColor = "#55f81f";
 }
 
 function gameLoop(time) {
@@ -65,7 +65,7 @@ function stopGameLoop() {
 
 function reset() {
   window.cancelAnimationFrame(engineState.mainLoopId);
-  DOM.gameScreen.style.backgroundColor = "black";
+  DOM.playScreen.style.backgroundColor = "black";
 
   engineState = {
     mainLoopId: null,
