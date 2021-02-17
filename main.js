@@ -76,6 +76,9 @@ function gameUpdate(time) {
 
 // Render (Draw) Game object.
 function gameRender() {
+  const ctx = engineState.renderCtx;
+  ctx.clearRect(0, 0, DOM.gameRenderArea.width, DOM.gameRenderArea.height);
+  gameState.objects[0].render();
   return;
 }
 
