@@ -1,5 +1,9 @@
 const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
                             
+const config = {
+  maxFPS: 60, // frame per second limiter (Max at 60).
+}
+
 let constantTime = 0;
 
 let engineState = {
@@ -42,11 +46,13 @@ function constantTimeRunner(time) {
     engineState.FPS = (1000 / millisecondPerFrame).toFixed(2);
   }
 
-  if (!engineState.mainLoopId) {
-    engineState.mainLoopId = requestAnimationFrame(constantTimeRunner);
-  } else {
-    requestAnimationFrame(constantTimeRunner);
-  }
+  setTimeout(() => {
+    if (!engineState.mainLoopId) {
+      engineState.mainLoopId = requestAnimationFrame(constantTimeRunner);
+    } else {
+      requestAnimationFrame(constantTimeRunner);
+    }
+  }, 1000 / config.maxFPS );
 }
 
 function renderDebugger() {
