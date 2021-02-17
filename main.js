@@ -57,8 +57,8 @@ function constantTimeRunner(time) {
 
 function renderDebugger() {
   DOM.controlPanel.FPS.innerText = engineState.FPS + " fps";
-  DOM.controlPanel.frameCounter.innerText = engineState.frameCount + " frames";
-  DOM.controlPanel.runningTime.innerText = engineState.runningTimeSecond + " s";
+  DOM.controlPanel.frameCounter.innerText = engineState.currentFrame + " frames";
+  DOM.controlPanel.runningTime.innerText = (constantTime / 1000).toFixed(2) + " s";
 }
 
 function gameLoop(time) {
