@@ -67,6 +67,9 @@ function stopGameLoop() {
 function reset() {
   window.cancelAnimationFrame(engineState.mainLoopId);
   DOM.playScreen.style.backgroundColor = "black";
+  if (document.getElementById("game-render-area")) {
+    document.getElementById("game-render-area").remove();
+  }
 
   engineState = {
     mainLoopId: null,
