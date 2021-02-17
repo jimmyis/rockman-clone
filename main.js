@@ -13,6 +13,13 @@ let engineState = {
 
 let gameState = {
   objects: [],
+  interactions: {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    space: false,
+  }
 }
 
 const DOM = {
