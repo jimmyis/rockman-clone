@@ -1,5 +1,10 @@
+const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+                            
+let constantTime = 0;
+
 let engineState = {
   mainLoopId: null,
+  runningTimeMS: 0,
 };
 
 const DOM = {
@@ -12,24 +17,36 @@ const DOM = {
   }
 }
 
-function constantFrameRunner(time) {
-  const secondPerFrame = (time - engineState.runningTimeMS) || 0;
-  const currentSecond = Math.floor(time / 1000);
-
-  if ((currentSecond - engineState.runningTimeSecond) >= 1) {
-    engineState.frameCount = parseInt(engineState.frameCount) + parseInt(engineState.FPS);
-  }
-
-  engineState.runningTimeMS = time;
-  engineState.runningTimeSecond = currentSecond;
+function constantTimeRunner(time) {
+  constantTime = Math.floor(time);
+  const millisecondPerFrame = constantTime - engineState.realtime;
+  engineState.realtime = constantTime;
 
   if (engineState.isGameLoopStart) {
-    renderDebugger(time);
-    engineState.FPS = (1000 / secondPerFrame).toFixed(2);
-    gameLoop(time)
+    if (engineState.startTime === 0) {
+      engineState.startTime = time;
+      engineState.runningTimeMS = engineState.realtime - engineState.startTime;
+    }
+    engineState.frameCount = Math.floor(engineState.realtime / millisecondPerFrame);
+
+    const loopFrame = engineState.frameCount !== engineState.currentFrame;
+
+    renderDebugger(engineState.realtime);
+    if (loopFrame) {
+      engineState.currentFrame += 1;
+
+      // Game Loop should be invoke each frame.
+      gameLoop(time);
+      constantTime = engineState.realtime / 1000;
+    }
+    engineState.FPS = (1000 / millisecondPerFrame).toFixed(2);
   }
 
-  engineState.mainLoopId = window.requestAnimationFrame(constantFrameRunner);
+  if (!engineState.mainLoopId) {
+    engineState.mainLoopId = requestAnimationFrame(constantTimeRunner);
+  } else {
+    requestAnimationFrame(constantTimeRunner);
+  }
 }
 
 function renderDebugger() {
@@ -38,22 +55,23 @@ function renderDebugger() {
   DOM.controlPanel.runningTime.innerText = engineState.runningTimeSecond + " s";
 }
 
-function update(time) {
-
-}
-
-function render() {
-  DOM.playScreen.style.backgroundColor = "#55f81f";
-}
-
 function gameLoop(time) {
-  update(time);
-  render();
+  gameUpdate(time);
+  gameRender();
+}
+
+function gameUpdate(time) {
+  return;
+}
+
+// Render (Draw) Game object.
+function gameRender() {
+  return;
 }
 
 function startGameLoop() {
   if (!engineState.mainLoopId) {
-    constantFrameRunner();
+    engineState.mainLoopId = requestAnimationFrame(constantTimeRunner);
   }
   engineState.isGameLoopStart = true;
   initGameRender();
@@ -78,6 +96,7 @@ function reset() {
     runningTimeMS: 0,
     runningTimeSecond: 0,
     frameCount: 0,
+    currentFrame: 0,
     FPS: 0,
     previousTime: 0
   }
@@ -105,5 +124,5 @@ function initGameRender() {
 (function main() {
   reset();
   initGameRender();
-  constantFrameRunner();
+  engineState.mainLoopId = requestAnimationFrame(constantTimeRunner);
 })();
