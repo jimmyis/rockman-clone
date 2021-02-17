@@ -77,7 +77,15 @@ function gameLoop(time) {
   gameRender();
 }
 
+// Update Game State and each object.
 function gameUpdate(time) {
+  const playerState = {};
+  if (gameState.interactions.up) { playerState.y = -1 }
+  if (gameState.interactions.down) { playerState.y = 1 }
+  if (gameState.interactions.left) { playerState.x = -1 }
+  if (gameState.interactions.right) { playerState.x = 1 };
+  if (gameState.interactions.space) { playerState.y = -4 };
+  gameState.objects[0].update(playerState);
   return;
 }
 
