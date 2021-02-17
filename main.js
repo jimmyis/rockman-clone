@@ -125,6 +125,32 @@ function initGameRender() {
   if (!document.getElementById("game-render-area")) {
     DOM.playScreen.appendChild(DOM.gameRenderArea);
   }
+
+function createGameObject(id, width, height, x, y, color) {
+  this.id = id;
+  this.w = width;
+  this.h = height;
+  this.x = x;
+  this.y = y;
+  this.state = {
+    color
+  };
+  this.update = (state) => {
+    // Position Update
+    // this.state = state;
+    if (state.x) { this.x += state.x };
+    if (state.y) { this.y += state.y };
+    if ((this.y + this.h) <= 200) {
+      this.y += 2;
+    }
+  }
+  this.render = () => {
+    const ctx = engineState.renderCtx;
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+  }
+
+  return this;
 }
 
 (function main() {
