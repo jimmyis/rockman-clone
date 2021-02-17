@@ -128,7 +128,7 @@ function initGameRender() {
 }
 
 (function main() {
-  reset();
   initGameRender();
-  engineState.mainLoopId = requestAnimationFrame(constantTimeRunner);
+  reset();
+  startGameLoop();
 })();
