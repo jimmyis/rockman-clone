@@ -19,7 +19,17 @@ let gameState = {
     left: false,
     right: false,
     space: false,
+  },
+  player: {
+    isFalling: true,
+    yBeforeJump: 0
   }
+}
+
+let gameRules = {
+  PLAYER_MAX_JUMP: 30,
+  GRAVITY: 1,
+  FLOOR: 200,
 }
 
 const DOM = {
@@ -79,13 +89,42 @@ function gameLoop(time) {
 
 // Update Game State and each object.
 function gameUpdate(time) {
-  const playerState = {};
-  if (gameState.interactions.up) { playerState.y = -1 }
-  if (gameState.interactions.down) { playerState.y = 1 }
-  if (gameState.interactions.left) { playerState.x = -1 }
-  if (gameState.interactions.right) { playerState.x = 1 };
-  if (gameState.interactions.space) { playerState.y = -4 };
-  gameState.objects[0].update(playerState);
+  const playerNewState = {};
+  const playerObj = gameState.objects[0];
+
+  const playerGround = playerObj.y + playerObj.h;
+  gameState.player.isFalling = playerGround < gameRules.FLOOR;
+
+  if (gameState.interactions.up) { playerNewState.y = -1 }
+  if (gameState.interactions.down) { playerNewState.y = 1 }
+  if (gameState.interactions.left) { playerNewState.x = -1 }
+  if (gameState.interactions.right) { playerNewState.x = 1 };
+  if (gameState.interactions.space) {
+
+    if (gameState.player.isFalling) {
+      gameState.player.yBeforeJump = playerGround;
+    } else {
+
+      // Register Jumping State at the first time
+      if (!gameState.player.isJumping) {
+        gameState.player.yBeforeJump = playerGround;
+      }
+
+      const maxJumpHeight = gameState.player.yBeforeJump - gameRules.PLAYER_MAX_JUMP;
+      const jumpLimitReached = playerGround <= maxJumpHeight;
+
+      gameState.player.isJumping = playerGround < gameState.player.yBeforeJump || !jumpLimitReached;
+
+      if (!jumpLimitReached) {
+        playerNewState.y = -gameRules.PLAYER_MAX_JUMP;
+      }
+    }
+
+  } else {
+    gameState.player.isJumping = false;
+  }
+
+  gameState.objects[0].update(playerNewState);
   return;
 }
 
@@ -166,8 +205,10 @@ function createGameObject(id, width, height, x, y, color) {
     // this.state = state;
     if (state.x) { this.x += state.x };
     if (state.y) { this.y += state.y };
-    if ((this.y + this.h) <= 200) {
-      this.y += 2;
+
+    // Gravity (Falling)
+    if ((this.y + this.h) <= gameRules.FLOOR && !gameState.player.isJumping) {
+      this.y += (2 * gameRules.GRAVITY);
     }
   }
   this.render = () => {
